@@ -25,7 +25,8 @@ const tooltip = d3.select("body")
 
 
 // Pour la première visualisation
-d3.csv("data/data/Airplane_Crashes_and_Fatalities_Since_1908_t0_2023.csv").then(data => {
+d3.csv("data/Airplane_Crashes_and_Fatalities_Since_1908_t0_2023.csv").then(data => {
+    console.log(data); 
 
     data.forEach(d => {
         d.year = new Date(d.Date).getFullYear();
@@ -65,14 +66,14 @@ d3.csv("data/data/Airplane_Crashes_and_Fatalities_Since_1908_t0_2023.csv").then(
         .attr("x", width / 2)
         .attr("y", height - 10)
         .attr("text-anchor", "middle")
-        .text("Year");
+        .text("Année");
 
     svg.append("text")
         .attr("transform", "rotate(-90)")
         .attr("x", -height / 2)
         .attr("y", 20)
         .attr("text-anchor", "middle")
-        .text("Number of Accidents");
+        .text("Nombre d'accidents");
 
     const line = d3.line()
         .x(d => x(d.year))
@@ -100,7 +101,7 @@ d3.csv("data/data/Airplane_Crashes_and_Fatalities_Since_1908_t0_2023.csv").then(
             tooltip
                 .style("display", "block")
                 .html(`
-                    <strong>Year:</strong> ${d.year}<br>
+                    <strong>Année:</strong> ${d.year}<br>
                     <strong>Accidents:</strong> ${d.count}
                 `);
 
