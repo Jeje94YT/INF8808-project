@@ -1,16 +1,37 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
+
 <head>
     <meta charset="utf-8">
-    <title>D3 Visualization</title>
+    <title>Airplane Accidents Visualization</title>
+
     <script src="https://d3js.org/d3.v7.min.js"></script>
+
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<h1>Ma visualisation</h1>
-<svg width="600" height="400"></svg>
+<div class="dashboard">
+
+    <h1>Évolution des accidents d'avion (1908-2023)</h1>
+
+    <p class="description">
+        Cette visualisation présente l’évolution du nombre d’accidents d’avion dans le monde
+        au fil du temps. Survolez les points pour voir les détails.
+    </p>
+
+    <div class="chart-container">
+        <svg id="lineChart"></svg>
+    </div>
+
+    <div class="slider-container">
+        <label for="yearRange">Filtrer par année :</label>
+        <input type="range" id="yearRange" min="1908" max="2023" value="2023">
+        <span id="yearLabel">2023</span>
+    </div>
+
+</div>
 
 <script src="script.js"></script>
 
