@@ -25,10 +25,44 @@
         <svg id="lineChart"></svg>
     </div>
 
+
     <div class="slider-container">
         <label for="yearRange">Filtrer par année :</label>
         <input type="range" id="yearRange" min="1908" max="2023" value="2023">
         <span id="yearLabel">2023</span>
+    </div>
+    <h2>Carte des accidents</h2>
+    <div class="map-and-controls">
+        <div class="map-legend">
+            <h3>Légende</h3>
+            <ul>
+                <li><span class="legend-circle red"></span> Accidents de guerre</li>
+                <li><span class="legend-circle blue"></span> Autres accidents</li>
+            </ul>
+        </div>
+
+        <div class="chart-container">
+            <svg id="mapChart"></svg>
+        </div>
+
+        <div class="filters">
+            <label for="filterWar">Afficher :</label>
+            <select id="filterWar">
+                <option value="all">Tous</option>
+                <option value="war">Accidents de guerre (rouge)</option>
+                <option value="other">Autres accidents (bleu)</option>
+            </select>
+
+            <label for="filterGroup">Regrouper par :</label>
+            <select id="filterGroup">
+                <option value="continent">Continent</option>
+                <option value="topography">Zone géographique</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="timeline-container">
+        <svg id="timelineChart"></svg>
     </div>
 
 </div>
