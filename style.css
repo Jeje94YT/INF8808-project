@@ -17,7 +17,7 @@ h1{
 }
 
 .dashboard{
-    max-width:1200px;
+    max-width:1500px;
     margin:auto;
     background:white;
     padding:25px;
@@ -93,13 +93,13 @@ input[type="range"]{
 
 .timeline-container {
     display: flex;
-    justify-content: center; 
     margin-top: 20px;
+    justify-content: center;
 }
 
 #timelineChart {
-    width: 80%;        
-    max-width: 900px;  
+    width: 100%;        
+    max-width: 1300px;
     height: 250px;     
     display: block;    
 }

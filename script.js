@@ -124,6 +124,7 @@ d3.csv("data/Airplane_Crashes_and_Fatalities_Since_1908_t0_2023.csv").then(data 
 });
 
 // Visualisation #2
+// Carte du monde
 
 const svgMap = d3.select("#mapChart")
     .attr("width", width)
@@ -225,7 +226,8 @@ d3.select("#filterGroup").on("change", loadMap);
 
 loadMap();
 
-const timelineWidth = 900;
+// TimeLine
+const timelineWidth = 1300;
 const timelineHeight = 250;
 const marginTimeline = { top: 30, right: 40, bottom: 50, left: 60 };
 
@@ -245,33 +247,54 @@ const tooltipTimeline = d3.select("body")
     .style("display", "none");
 
 // Données inventées
-const years = d3.range(1919, 2024);
-const stackedData = years.map(year => ({
-    year: year,
-    Other: Math.floor(Math.random() * 20),
-    War: Math.floor(Math.random() * 10)
-}));
+const years = d3.range(1908, 2023);
+const continents = [
+    "Europe",
+    "North America",
+    "Asia",
+    "South America",
+    "Africa",
+    "Oceania"
+];
 
-const keys = ["Other", "War"];
+const stackedData = years.map(year => {
+    let obj = { year: year };
+
+    continents.forEach(c => {
+        obj[c] = Math.floor(Math.random() * 10);
+    });
+
+    return obj;
+});
+
+const keys = continents;
 const stackGenerator = d3.stack().keys(keys);
 const series = stackGenerator(stackedData);
 
-const x = d3.scaleLinear()
-    .domain([1919, 2023])
-    .range([marginTimeline.left, timelineWidth - marginTimeline.right]);
+const x = d3.scaleBand()
+    .domain(stackedData.map(d => d.year))
+    .range([marginTimeline.left, timelineWidth - marginTimeline.right])
+    .padding(0.1);
 
 const y = d3.scaleLinear()
-    .domain([0, d3.max(stackedData, d => d.Other + d.War)])
+    .domain([
+        0,
+        d3.max(stackedData, d =>
+            continents.reduce((sum, c) => sum + d[c], 0)
+        )
+    ])
     .range([timelineHeight - marginTimeline.bottom, marginTimeline.top]);
 
 const color = d3.scaleOrdinal()
     .domain(keys)
-    .range(["#0077cc", "#cc0000"]);
+    .range(d3.schemeTableau10);
 
-// Axes
 svgTimeline.append("g")
     .attr("transform", `translate(0,${timelineHeight - marginTimeline.bottom})`)
-    .call(d3.axisBottom(x).tickFormat(d3.format("d")));
+    .call(
+        d3.axisBottom(x)
+            .tickValues(x.domain().filter((d,i)=> !(i%10)))
+    )
 
 svgTimeline.append("g")
     .attr("transform", `translate(${marginTimeline.left},0)`)
@@ -285,16 +308,22 @@ svgTimeline.selectAll("g.layer")
     .selectAll("rect")
     .data(d => d)
     .join("rect")
-    .attr("x", d => x(d.data.year) - 5)
+    .attr("x", d => x(d.data.year))
+    .attr("width", x.bandwidth())
     .attr("y", d => y(d[1]))
     .attr("height", d => y(d[0]) - y(d[1]))
     .attr("width", 10)
     .on("mouseover", (event, d) => {
+
+        const continent = d3.select(event.currentTarget.parentNode).datum().key;
+
         tooltipTimeline
             .style("display", "block")
-            .html(`<strong>Année:</strong> ${d.data.year}<br>
-                   <strong>Other:</strong> ${d.data.Other}<br>
-                   <strong>War:</strong> ${d.data.War}`);
+            .html(`
+                <strong>Année:</strong> ${d.data.year}<br>
+                <strong>Continent:</strong> ${continent}<br>
+                <strong>Accidents:</strong> ${d.data[continent]}
+            `);
     })
     .on("mousemove", event => {
         tooltipTimeline
