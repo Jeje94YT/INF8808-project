@@ -4,7 +4,7 @@
   "description": "",
   "main": "script.js",
   "scripts": {
-    "start": "live-server --port=8000"
+    "start": "live-server --port=8080"
   },
   "keywords": [],
   "author": "",
