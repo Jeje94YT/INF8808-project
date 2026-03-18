@@ -25,23 +25,19 @@ const tooltip = d3.select("body")
 
 
 // Pour la première visualisation
-d3.csv("data/Airplane_Crashes_and_Fatalities_Since_1908_t0_2023.csv").then(data => {
-    console.log(data); 
-
-    data.forEach(d => {
-        d.year = new Date(d.Date).getFullYear();
-    });
+let globalData = [];
+let selectedRange = [1908, 2023];
+function updateCharts() {
+    const filtered = globalData.filter(d =>
+        d.year >= selectedRange[0] && d.year <= selectedRange[1]
+    );
 
     const accidentsPerYear = d3.rollups(
-        data,
+        filtered,
         v => v.length,
         d => d.year
-    ).map(d => ({
-        year: d[0],
-        count: d[1]
-    }))
-    .sort((a, b) => a.year - b.year);
-
+    ).map(d => ({ year: d[0], count: d[1] }))
+        .sort((a, b) => a.year - b.year);
     const x = d3.scaleLinear()
         .domain(d3.extent(accidentsPerYear, d => d.year))
         .range([margin.left, width - margin.right]);
@@ -50,7 +46,7 @@ d3.csv("data/Airplane_Crashes_and_Fatalities_Since_1908_t0_2023.csv").then(data 
         .domain([0, d3.max(accidentsPerYear, d => d.count)])
         .nice()
         .range([height - margin.bottom, margin.top]);
-
+    svg.selectAll("*").remove(); // clears everything inside the SVG
     svg.append("g")
         .attr("transform", `translate(0,${height - margin.bottom})`)
         .call(
@@ -120,9 +116,53 @@ d3.csv("data/Airplane_Crashes_and_Fatalities_Since_1908_t0_2023.csv").then(data 
             tooltip.style("display", "none");
 
         });
+}
+d3.csv("data/Airplane_Crashes_and_Fatalities_Since_1908_t0_2023.csv").then(data => {
+    console.log(data);
+    globalData = data;
+
+    data.forEach(d => {
+        d.year = new Date(d.Date).getFullYear();
+    });
+
+    const accidentsPerYear = d3.rollups(
+        data,
+        v => v.length,
+        d => d.year
+    ).map(d => ({
+        year: d[0],
+        count: d[1]
+    }))
+    .sort((a, b) => a.year - b.year);
+
+
+    updateCharts()
 
 });
+document.addEventListener("DOMContentLoaded", function () {
 
+    const slider = document.getElementById('yearRangeSlider');
+
+    noUiSlider.create(slider, {
+        start: selectedRange,
+        connect: true,
+        range: { min: 1908, max: 2023 },
+        step: 1
+    });
+
+    slider.noUiSlider.on("update", function(values) {
+
+        selectedRange = values.map(Number);
+
+        d3.select("#yearStart").text(selectedRange[0]);
+        d3.select("#yearEnd").text(selectedRange[1]);
+
+        if (globalData.length > 0) {
+            updateCharts();
+        }
+    });
+
+});
 // Visualisation #2
 // Carte du monde
 
@@ -163,7 +203,7 @@ const mapData = [
 function loadMap() {
     const filterGroup = d3.select("#filterGroup").property("value");
 
-    const mapURL = filterGroup === "topography" 
+    const mapURL = filterGroup === "topography"
         ? "rajouter lien topographique quand trouvé"
         : "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson";
 
@@ -336,7 +376,7 @@ svgTimeline.selectAll("g.layer")
 const svgDecade = d3.select("#decadeChart")
     .attr("width", 1000)
     .attr("height", 320);
-    
+
 d3.csv("data/Airplane_Crashes_and_Fatalities_Since_1908_t0_2023.csv").then(data => {
     data.forEach(d => {
         d.year = new Date(d.Date).getFullYear();

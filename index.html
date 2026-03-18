@@ -8,6 +8,9 @@
     <script src="https://d3js.org/d3.v7.min.js"></script>
 
     <link rel="stylesheet" href="style.css">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider@15.7.0/dist/nouislider.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/nouislider@15.7.0/dist/nouislider.min.js"></script>
 </head>
 
 <body>
@@ -26,10 +29,13 @@
     </div>
 
 
-    <div class="slider-container">
-        <label for="yearRange">Filtrer par année :</label>
-        <input type="range" id="yearRange" min="1908" max="2023" value="2023">
-        <span id="yearLabel">2023</span>
+    <div id="yearRangeContainer">
+        <label>Year range:</label>
+        <div id="yearRangeSlider"></div>
+        <p>
+            <span id="yearStart">1912</span> -
+            <span id="yearEnd">2023</span>
+        </p>
     </div>
     <h2>Carte des accidents</h2>
     <div class="map-and-controls">
