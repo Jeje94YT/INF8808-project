@@ -71,6 +71,36 @@ function updateCharts() {
         .attr("text-anchor", "middle")
         .text("Nombre d'accidents");
 
+    const historicalPeriods = [
+        { name: "WW1", start: 1914, end: 1919, color: "orange" },
+        { name: "WW2", start: 1939, end: 1946, color: "red" },
+        //{ name: "Cold War", start: 1947, end: 1991, color: "purple" },
+    ];
+
+// Add shaded areas
+    svg.selectAll(".period")
+        .data(historicalPeriods)
+        .enter()
+        .append("rect")
+        .attr("class", "period")
+        .attr("x", d => x(d.start))
+        .attr("width", d => x(d.end) - x(d.start))
+        .attr("y", margin.top)
+        .attr("height", height - margin.top - margin.bottom)
+        .attr("fill", d => d.color)
+        .attr("opacity", 0.15);
+    svg.selectAll(".period-label")
+        .data(historicalPeriods)
+        .enter()
+        .append("text")
+        .attr("x", d => x((d.start + d.end) / 2))
+        .attr("y", margin.top + 15)
+        .attr("text-anchor", "middle")
+        .attr("fill", "black")
+        .attr("font-size", "12px")
+        .text(d => d.name);
+
+
     const line = d3.line()
         .x(d => x(d.year))
         .y(d => y(d.count))
