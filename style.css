@@ -1,111 +1,100 @@
 body{
     font-family: Arial, sans-serif;
-    background-color:#f7f7f7;
-    margin:0;
-    padding:20px;
+    background-color: #f7f7f7;
+    margin: 0;
+    padding: 0;
 }
 
 h1{
-    text-align:center;
-    margin-bottom:10px;
+    text-align: center;
+    margin-bottom: 10px;
+    color: #333;
 }
 
-.description{
-    text-align:center;
-    color:#555;
-    margin-bottom:20px;
+h2, h3 {
+    color: #444;
 }
 
-.dashboard{
-    max-width:1500px;
-    margin:auto;
-    background:white;
-    padding:25px;
-    border-radius:10px;
-    box-shadow:0px 2px 10px rgba(0,0,0,0.1);
+.description {
+    text-align: center;
+    color: #555;
+    margin-bottom: 0px;
+    font-size: 1.1em;
+    line-height: 1.5;
 }
 
-.chart-container{
-    margin-top:20px;
+.vertical-menu {
+    position: fixed;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
-svg{
-    width:100%;
-    height:450px;
+.vertical-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
-.slider-container{
-    margin-top:25px;
-    text-align:center;
-}
-#yearRangeContainer {
-    width: 300px;   /* change this to whatever width you want */
-    margin: 0 auto; /* centers the slider horizontally */
+.vertical-menu li {
+    margin: 15px 0;
 }
 
-input[type="range"]{
-    width:300px;
-    margin-left:10px;
+.vertical-menu a {
+    text-decoration: none;
+    color: #666;
+    font-size: 0.95em;
+    padding: 5px 10px;
+    border-left: 3px solid #ccc;
+    transition: all 0.3s ease;
+    display: block;
 }
 
-#yearLabel{
-    margin-left:10px;
-    font-weight:bold;
+.vertical-menu a:hover,
+.vertical-menu a:focus {
+    border-left-color: #0077cc;
+    color: #0077cc;
+    background-color: #f0f8ff;
 }
 
-/* Tooltip style */
-
-.tooltip{
-    position:absolute;
-    background:white;
-    border:1px solid #ccc;
-    padding:6px;
-    border-radius:4px;
-    font-size:12px;
-    pointer-events:none;
-    box-shadow:0 2px 6px rgba(0,0,0,0.2);
+.scrolly-container {
+    scroll-snap-type: y mandatory;
+    overflow-y: scroll;
+    height: 100vh;
+    scroll-behavior: smooth;
 }
 
-.map-and-controls {
+.step {
+    scroll-snap-align: start;
+    min-height: 100vh;
+    padding: 40px 20px 40px 150px;
     display: flex;
     align-items: center;
-    gap: 20px;
-    margin-bottom: 20px;
-}
-
-
-.map-legend {
-    min-width: 180px;
     justify-content: center;
 }
 
-
-.chart-container {
-    flex-grow: 1;
-}
-
-
-.filters {
-    min-width: 180px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    justify-content: center;
-}
-
-
-
-.timeline-container {
-    display: flex;
-    margin-top: 20px;
-    justify-content: center;
-}
-
-#timelineChart {
+.content {
     width: 100%;
     max-width: 1300px;
-    height: 250px;
-    display: block;
+    background: white;
+    padding: 30px 40px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 15px rgba(0,0,0,0.05);
+}
+
+.chart-container,
+.timeline-container,
+.mortalities-container,
+.ground-deaths-container {
+    margin-top: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
 .legend-circle {
@@ -113,8 +102,51 @@ input[type="range"]{
     width: 15px;
     height: 15px;
     border-radius: 50%;
-    margin-right: 5px;
+    margin-right: 8px;
 }
 
 .legend-circle.red { background-color: red; }
 .legend-circle.blue { background-color: blue; }
+
+#btnPlay {
+    background-color: #0077cc;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+#btnPlay:hover {
+    background-color: #005fa3;
+}
+
+.tooltip,
+.tooltip-timeline,
+.tooltip-decade,
+.tooltip-ground {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid #ccc;
+    padding: 10px 15px;
+    border-radius: 6px;
+    font-size: 13px;
+    line-height: 1.4;
+    pointer-events: none;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    z-index: 1000;
+    display: none;
+}
+
+#yearRangeContainer {
+    width: 300px;
+    margin: 30px auto 10px auto;
+    text-align: center;
+}
+
+#yearRangeContainer label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 15px;
+}
