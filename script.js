@@ -19,6 +19,7 @@ d3.csv("data/Airplane_Crashes_and_Fatalities_Since_1908_t0_2023.csv").then(data 
     initViz1();
     initViz2();
     initViz3();
+    initViz4();
     
 }).catch(error => {
     console.error("Erreur lors du chargement des données:", error);

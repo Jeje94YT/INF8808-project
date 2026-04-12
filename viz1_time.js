@@ -2,6 +2,8 @@ function initViz1() {
     const width = 900;
     const height = 450;
     const margin = { top: 40, right: 40, bottom: 50, left: 70 };
+    
+    // On garde cette variable pour que la fonction updateCharts() dessine tout par défaut
     let selectedRange = [1908, 2023];
 
     const svg = d3.select("#lineChart")
@@ -77,6 +79,8 @@ function initViz1() {
             .on("mouseout", () => tooltip.style("display", "none"));
     }
 
+    // TODO: a effacer
+    /*
     const slider = document.getElementById('yearRangeSlider');
     noUiSlider.create(slider, {
         start: selectedRange,
@@ -91,6 +95,7 @@ function initViz1() {
         d3.select("#yearEnd").text(selectedRange[1]);
         if (globalData.length > 0) updateCharts();
     });
+    */
 
     updateCharts();
 }

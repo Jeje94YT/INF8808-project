@@ -20,6 +20,7 @@
             <li><a href="#section1">Temps</a></li>
             <li><a href="#section2">Localisation</a></li>
             <li><a href="#section3">Gravité</a></li>
+            <li><a href="#section4">Opérateurs</a></li>
         </ul>
     </nav>
 
@@ -29,17 +30,18 @@
                 <h1 style="font-size: 2.5em; color: #0077cc; margin-bottom: 20px;">Un Siècle d'Aviation : Risques et Évolution</h1>
                 
                 <p class="description" style="font-size: 1.2em; text-align: justify; margin-bottom: 15px;">
-                    Bienvenue dans cette exploration interactive retraçant plus d'un siècle d'accidents d'avion, de 1908 à 2023.
+                    L'aviation constitue aujourd'hui l'un des principaux moyens de transport à longue distance. Bien que souvent influencée par la couverture médiatique, la perception du public diffère parfois des données objectives de sécurité.
+                </p>
+
+                <p class="description" style="font-size: 1.2em; text-align: justify; margin-bottom: 15px;">
+                    Bienvenue dans cette exploration interactive retraçant plus d'un siècle d'accidents d'avion recensés, de 1908 à 2023. À travers ce tableau de bord, vous êtes invité à analyser ces événements selon quatre dimensions principales :
                 </p>
                 
-                <p class="description" style="font-size: 1.2em; text-align: justify;">
-                    À travers ce tableau de bord, vous êtes invité à analyser ces événements selon trois dimensions principales :
-                </p>
-                
-                <ul style="text-align: left; font-size: 1.2em; color: #555; margin: 20px auto; max-width: 600px; line-height: 1.6;">
+                <ul style="text-align: left; font-size: 1.2em; color: #555; margin: 20px auto; max-width: 700px; line-height: 1.6;">
                     <li><strong>Le temps :</strong> Comment la fréquence des accidents a-t-elle évolué avec les grands conflits et l'essor de l'aviation commerciale ?</li>
                     <li><strong>La localisation :</strong> Quelles sont les régions historiquement les plus touchées et comment le danger s'est-il déplacé géographiquement ?</li>
-                    <li><strong>La gravité :</strong> Quel est le bilan humain de ces accidents au fil des décennies ?</li>
+                    <li><strong>La gravité :</strong> Quel est le bilan humain de ces accidents au fil des décennies, que ce soit à bord ou au sol ?</li>
+                    <li><strong>Les opérateurs :</strong> Y a-t-il une différence notable de dangerosité entre l'aviation commerciale et militaire ?</li>
                 </ul>
 
                 <p style="margin-top: 40px; font-style: italic; color: #888; font-size: 1.1em;">
@@ -57,15 +59,7 @@
                     <svg id="lineChart"></svg>
                 </div>
 
-                <div id="yearRangeContainer">
-                    <label>Year range:</label>
-                    <div id="yearRangeSlider"></div>
-                    <p>
-                        <span id="yearStart">1912</span> -
-                        <span id="yearEnd">2023</span>
-                    </p>
                 </div>
-            </div>
         </section>
 
         <section id="section2" class="step">
@@ -142,12 +136,24 @@
             </div>
         </section>
 
+        <section id="section4" class="step">
+            <div class="content" style="width: 100%; max-width: 1200px; margin: auto;">
+                <h1>Aviation Commerciale vs Militaire</h1>
+                <p class="description">Cette visualisation compare l'aviation commerciale et militaire sur une même échelle temporelle afin de mettre en évidence la gravité globale (fatalités totales) et la gravité moyenne par accident.</p>
+                
+                <div class="chart-container" style="margin-top: 30px; background: #fff; border-radius: 8px; padding: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                    <svg id="operatorChart"></svg>
+                </div>
+            </div>
+        </section>
+
     </div>
 
     <script src="preprocess.js"></script>
     <script src="viz1_time.js"></script>
     <script src="viz2_location.js"></script>
     <script src="viz3_severity.js"></script>
+    <script src="viz4_operators.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
