@@ -18,11 +18,57 @@ function initViz2() {
     let playing = false;
     let playInterval;
 
+    function getLargestPolygon(feature) {
+        if (feature.geometry.type === "Polygon") {
+            return feature.geometry.coordinates;
+        }
+        if (feature.geometry.type === "MultiPolygon") {
+            let maxArea = -1;
+            let largestPolygon = null;
+            feature.geometry.coordinates.forEach(poly => {
+                const dummyFeature = { type: "Feature", geometry: { type: "Polygon", coordinates: poly } };
+                const area = d3.geoArea(dummyFeature);
+                if (area > maxArea) {
+                    maxArea = area;
+                    largestPolygon = poly;
+                }
+            });
+            return largestPolygon;
+        }
+        return null;
+    }
+
     function getCountryCoordinates(countryName) {
         if (!worldGeoJSON || countryName === "Unknown") return null;
+        
+        const manualCentroids = {
+            "canada": [-96.0, 60.0],
+            "united states": [-98.5795, 39.8283],
+            "russia": [90.0, 62.0],
+            "france": [2.2137, 46.2276],
+            "united kingdom": [-3.4360, 53.0],
+            "norway": [8.4689, 60.4720],
+        };
+        
+        const cLower = countryName.toLowerCase();
+        if (manualCentroids[cLower]) return manualCentroids[cLower];
+
         const normalize = name => name.toLowerCase().replace("usa", "united states of america").replace("united states", "united states of america").replace("england", "united kingdom");
-        const feature = worldGeoJSON.features.find(f => normalize(f.properties.name).includes(normalize(countryName)) || normalize(countryName).includes(normalize(f.properties.name)));
-        return feature ? d3.geoCentroid(feature) : null;
+        
+        const feature = worldGeoJSON.features.find(f => 
+            normalize(f.properties.name).includes(normalize(countryName)) || 
+            normalize(countryName).includes(normalize(f.properties.name))
+        );
+        
+        if (!feature) return null;
+
+        const largestPolyCoords = getLargestPolygon(feature);
+        if (largestPolyCoords) {
+            const mainLandFeature = { type: "Feature", geometry: { type: "Polygon", coordinates: largestPolyCoords } };
+            return d3.geoCentroid(mainLandFeature);
+        }
+        
+        return d3.geoCentroid(feature);
     }
 
     function updateMapData() {
@@ -43,18 +89,41 @@ function initViz2() {
             }
         });
 
+        bubbleData.sort((a, b) => b.count - a.count);
+
         const rScale = d3.scaleSqrt().domain([0, d3.max(bubbleData, d => d.count) || 1]).range([2, 16]);
+        
         const circles = mapSvg.selectAll("circle.accident-bubble").data(bubbleData, d => d.country + "-" + d.war);
 
         circles.exit().transition().duration(500).attr("r", 0).remove();
 
-        circles.enter().append("circle").attr("class", "accident-bubble")
-            .attr("cx", d => mapProjection([d.lon, d.lat])[0]).attr("cy", d => mapProjection([d.lon, d.lat])[1])
-            .attr("fill", d => d.war ? "red" : "blue").attr("opacity", 0.6).attr("r", 0) 
-            .on("mouseover", (event, d) => tooltip.style("display", "block").html(`<strong>Pays:</strong> ${d.country}<br><strong>Accidents:</strong> ${d.count}<br><strong>Type:</strong> ${d.war ? "Guerre" : "Civil"}`))
-            .on("mousemove", event => tooltip.style("left", (event.pageX + 10) + "px").style("top", (event.pageY - 20) + "px"))
-            .on("mouseout", () => tooltip.style("display", "none"))
-            .merge(circles).transition().duration(500).attr("r", d => rScale(d.count));
+        const circlesEnter = circles.enter().append("circle").attr("class", "accident-bubble")
+            .attr("cx", d => mapProjection([d.lon, d.lat])[0] + (d.war ? -5 : 5)) 
+            .attr("cy", d => mapProjection([d.lon, d.lat])[1])
+            .attr("fill", d => d.war ? "red" : "blue")
+            .attr("opacity", 0.65)
+            .attr("stroke", "#ffffff")
+            .attr("stroke-width", 0.8)
+            .attr("r", 0) 
+            .on("mouseover", (event, d) => {
+                tooltip.style("display", "block").html(`<strong>Pays:</strong> ${d.country}<br><strong>Accidents:</strong> ${d.count}<br><strong>Type:</strong> ${d.war ? "Guerre" : "Civil"}`);
+                d3.select(event.currentTarget).attr("opacity", 1).attr("stroke", "#333").attr("stroke-width", 1.5);
+            })
+            .on("mousemove", event => {
+                const tooltipWidth = tooltip.node().offsetWidth;
+                let xPosition = event.pageX + 10;
+                if (xPosition + tooltipWidth > window.innerWidth - 20) xPosition = event.pageX - tooltipWidth - 10;
+                tooltip.style("left", xPosition + "px").style("top", (event.pageY - 20) + "px");
+            })
+            .on("mouseout", (event) => {
+                tooltip.style("display", "none");
+                d3.select(event.currentTarget).attr("opacity", 0.65).attr("stroke", "#ffffff").attr("stroke-width", 0.8);
+            });
+
+        circlesEnter.merge(circles).transition().duration(500)
+            .attr("cx", d => mapProjection([d.lon, d.lat])[0] + (d.war ? -3 : 3))
+            .attr("cy", d => mapProjection([d.lon, d.lat])[1])
+            .attr("r", d => rScale(d.count));
     }
 
     // Timeline des accidents par continent
