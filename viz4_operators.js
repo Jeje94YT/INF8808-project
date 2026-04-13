@@ -395,6 +395,26 @@ function initViz4() {
     return [startYear, endYear];
   }
 
+  function getDynamicWindowBounds(focusYear) {
+    return {
+      maxBefore: Math.max(0, focusYear - VIZ4_DEFAULT_START_YEAR),
+      maxAfter: Math.max(0, VIZ4_DEFAULT_END_YEAR - focusYear),
+    };
+  }
+
+  function syncWindowBounds(focusYear) {
+    const { maxBefore, maxAfter } = getDynamicWindowBounds(focusYear);
+
+    yearsBeforeInput.attr("max", maxBefore);
+    yearsAfterInput.attr("max", maxAfter);
+
+    yearsBefore = Math.min(yearsBefore, maxBefore);
+    yearsAfter = Math.min(yearsAfter, maxAfter);
+
+    yearsBeforeInput.property("value", yearsBefore);
+    yearsAfterInput.property("value", yearsAfter);
+  }
+
   function updateFocusText(
     focusYear,
     beforeYears,
@@ -896,6 +916,8 @@ function initViz4() {
   }
 
   function renderFromFocus(focusYear, beforeYears, afterYears) {
+    syncWindowBounds(focusYear);
+
     const [startYear, endYear] = clampRangeFromFocus(
       focusYear,
       beforeYears,
@@ -933,8 +955,16 @@ function initViz4() {
   }
 
   function syncWindowInputsAndRender() {
-    yearsBefore = sanitizeWindowValue(+yearsBeforeInput.property("value"));
-    yearsAfter = sanitizeWindowValue(+yearsAfterInput.property("value"));
+    const { maxBefore, maxAfter } = getDynamicWindowBounds(analyzedYear);
+
+    yearsBefore = Math.min(
+      sanitizeWindowValue(+yearsBeforeInput.property("value")),
+      maxBefore,
+    );
+    yearsAfter = Math.min(
+      sanitizeWindowValue(+yearsAfterInput.property("value")),
+      maxAfter,
+    );
 
     yearsBeforeInput.property("value", yearsBefore);
     yearsAfterInput.property("value", yearsAfter);
