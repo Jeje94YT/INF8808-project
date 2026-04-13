@@ -16,43 +16,49 @@
 <body>
     <nav class="vertical-menu">
         <ul>
-            <li><a href="#intro">📋 Introduction</a></li>
-            <li><a href="#section1">⏱️ Temps</a></li>
-            <li><a href="#section2">🌍 Localisation</a></li>
-            <li><a href="#section3">⚠️ Gravité</a></li>
-            <li><a href="#section4">✈️ Opérateurs</a></li>
+            <li><a href="#intro">Introduction</a></li>
+            <li><a href="#section1">Temps</a></li>
+            <li><a href="#section2">Localisation</a></li>
+            <li><a href="#section3">Gravité</a></li>
+            <li><a href="#section4">Opérateurs</a></li>
         </ul>
     </nav>
 
     <div class="scrolly-container">
         <section id="intro" class="step">
             <div class="content" style="width: 100%; max-width: 900px; margin: auto; text-align: center; padding: 30px;">
-                <h1 style="font-size: 2.5em; color: #ea580c; margin-bottom: 20px;">📋 Un Siècle d'Aviation : Risques et Évolution</h1>
+                <h1 style="font-size: 2.5em; color: #ea580c; margin-bottom: 20px;">Accidents aériens (1908-2023)</h1>
+
+                <p style="margin: 0 0 8px 0; font-weight: 700; color: #1e293b;">Équipe 8 - D3</p>
+                <ul style="text-align: left; font-size: 1em; color: #334155; margin: 0 auto 18px auto; max-width: 520px; line-height: 1.5;">
+                    <li>Jérémie Cormier</li>
+                    <li>David Van-Truong Vo</li>
+                    <li>Thomas Tzeng Souvanlasy</li>
+                    <li>Vivian Melliz Medina</li>
+                    <li>Jonathan Kim</li>
+                    <li>Francis Trahan</li>
+                </ul>
                 
                 <p class="description" style="font-size: 1.2em; text-align: justify; margin-bottom: 15px;">
-                    L'aviation constitue aujourd'hui l'un des principaux moyens de transport à longue distance. Bien que souvent influencée par la couverture médiatique, la perception du public diffère parfois des données objectives de sécurité.
+                    Cette visualisation utilise le jeu de données Airplane Crashes and Fatalities Since 1908 (1908-2023). L'objectif est de comparer les tendances observées selon le temps, la localisation, la gravité et le type d'opérateur.
                 </p>
 
                 <p class="description" style="font-size: 1.2em; text-align: justify; margin-bottom: 15px;">
-                    Bienvenue dans cette exploration interactive retraçant plus d'un siècle d'accidents d'avion recensés, de 1908 à 2023. À travers de celle-ci, vous êtes invité à analyser ces événements selon quatre dimensions principales :
+                    Les sections ci-dessous répondent à des questions d'analyse précises basées sur les mesures du jeu de données :
                 </p>
                 
                 <ul style="text-align: left; font-size: 1.2em; color: #555; margin: 20px auto; max-width: 700px; line-height: 1.6;">
-                    <li><strong>⏱️ Le temps :</strong> Comment la fréquence des accidents a-t-elle évolué avec les grands conflits et l'essor de l'aviation commerciale ?</li>
-                    <li><strong>🌍 La localisation :</strong> Quelles sont les régions historiquement les plus touchées et comment le danger s'est-il déplacé géographiquement ?</li>
-                    <li><strong>⚠️ La gravité :</strong> Quel est le bilan humain de ces accidents au fil des décennies, que ce soit à bord ou au sol ?</li>
-                    <li><strong>✈️ Les opérateurs :</strong> Y a-t-il une différence notable de dangerosité entre l'aviation commerciale et militaire ?</li>
+                    <li><strong>Temps :</strong> évolution annuelle du nombre d'accidents et périodes historiques.</li>
+                    <li><strong>Localisation :</strong> distribution géographique des accidents et évolution par continent.</li>
+                    <li><strong>Gravité :</strong> mortalité à bord et décès au sol selon les années.</li>
+                    <li><strong>Opérateurs :</strong> comparaison aviation commerciale vs militaire (total, moyenne, fréquence).</li>
                 </ul>
-
-                <p style="margin-top: 40px; font-style: italic; color: #888; font-size: 1.1em;">
-                    Faites défiler vers le bas pour commencer l'exploration 👇
-                </p>
             </div>
         </section>
 
         <section id="section1" class="step">
             <div class="content" style="width: 100%; max-width: 1200px; margin: auto;">
-                <h1>⏱️ Temps : Évolution Temporelle</h1>
+                <h1>Temps : Évolution temporelle</h1>
                 <p class="description">Depuis 1908, l'aviation a connu des mutations profondes. Cette première vue permet d'observer les pics d'accidents liés aux débuts de l'aviation commerciale et aux grands conflits.</p>
                 
                 <div class="chart-container">
@@ -64,7 +70,7 @@
 
         <section id="section2" class="step">
             <div class="content" style="width: 100%; max-width: 1200px; margin: auto;">
-                <h1>🌍 Localisation : Géographie des Risques</h1>
+                <h1>Localisation : Géographie des risques</h1>
                 <p class="description">Explorez la répartition mondiale. Utilisez le bouton <strong>Lecture</strong> pour observer comment les zones de danger ont migré d'un continent à l'autre au fil des décennies.</p>
                 
                 <div class="dashboard-v2" style="display: flex; flex-direction: column; width: 100%; margin-top: 0px;">
@@ -128,7 +134,7 @@
 
         <section id="section3" class="step">
             <div class="content" style="width: 100%; max-width: 1200px; margin: auto;">
-                <h1>⚠️ Gravité : Bilan de décès</h1>
+                <h1>Gravité : Bilan de décès</h1>
                 
                 <div class="mortalities-container">
                     <svg id="decadeChart"></svg>
@@ -142,8 +148,8 @@
 
         <section id="section4" class="step">
             <div class="content" style="width: 100%; max-width: 1200px; margin: auto;">
-                <h1>✈️ Opérateurs : Aviation Commerciale vs Militaire</h1>
-                <p class="description">Cette visualisation compare l'aviation commerciale et militaire sur une même échelle temporelle afin de mettre en évidence la gravité globale (fatalités totales) et la gravité moyenne par accident.</p>
+                <h1>Opérateurs : Aviation commerciale vs militaire</h1>
+                <p class="description">Comparaison sur une même échelle temporelle des fatalités totales, du nombre d'accidents (N) et des fatalités moyennes par accident (Avg).</p>
                 
                 <div class="chart-container" style="margin-top: 30px; background: #fff; border-radius: 8px; padding: 20px;">
                     <svg id="operatorChart"></svg>
