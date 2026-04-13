@@ -79,23 +79,5 @@ function initViz1() {
             .on("mouseout", () => tooltip.style("display", "none"));
     }
 
-    // TODO: a effacer
-    /*
-    const slider = document.getElementById('yearRangeSlider');
-    noUiSlider.create(slider, {
-        start: selectedRange,
-        connect: true,
-        range: { min: 1908, max: 2023 },
-        step: 1
-    });
-
-    slider.noUiSlider.on("update", function(values) {
-        selectedRange = values.map(Number);
-        d3.select("#yearStart").text(selectedRange[0]);
-        d3.select("#yearEnd").text(selectedRange[1]);
-        if (globalData.length > 0) updateCharts();
-    });
-    */
-
     updateCharts();
 }
