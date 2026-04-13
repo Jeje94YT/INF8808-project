@@ -1,4 +1,5 @@
 function initViz4() {    
+    // TODO: ajouter le code pour la viz4
     const width = 1200;
     const height = 450;
     const margin = { top: 40, right: 30, bottom: 50, left: 60 };
