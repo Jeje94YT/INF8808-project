@@ -59,7 +59,11 @@
         <section id="section1" class="step">
             <div class="content" style="width: 100%; max-width: 1200px; margin: auto;">
                 <h1>Temps : Évolution temporelle</h1>
-                <p class="description">Depuis 1908, l'aviation a connu des mutations profondes. Cette première vue permet d'observer les pics d'accidents liés aux débuts de l'aviation commerciale et aux grands conflits.</p>
+                <p class="description">
+                Depuis 1908, l'aviation a connu des mutations profondes. Cette première visualisation montre l’évolution du nombre d’accidents aériens par année.
+                On observe des périodes de forte croissance, notamment durant les grandes guerres,
+                ainsi qu’une diminution progressive liée aux avancées technologiques.
+                </p>
                 
                 <div class="chart-container">
                     <svg id="lineChart"></svg>
@@ -71,7 +75,7 @@
         <section id="section2" class="step">
             <div class="content" style="width: 100%; max-width: 1200px; margin: auto;">
                 <h1>Localisation : Géographie des risques</h1>
-                <p class="description">Explorez la répartition mondiale. Utilisez le bouton <strong>Lecture</strong> pour observer comment les zones de danger ont migré d'un continent à l'autre au fil des décennies.</p>
+                <p class="description">Cette carte représente la distribution géographique des accidents aériens à travers le monde. Chaque point correspond à un accident, dont la taille reflète la fréquence. Le bouton <strong> Lecture </strong> permet d’observer l’évolution par décennie et de voir comment les zones à risque ont changé dans le temps..</p>
                 
                 <div class="dashboard-v2" style="display: flex; flex-direction: column; width: 100%; margin-top: 0px;">
                     
@@ -135,6 +139,11 @@
         <section id="section3" class="step">
             <div class="content" style="width: 100%; max-width: 1200px; margin: auto;">
                 <h1>Gravité : Bilan de décès</h1>
+                <p class="description">
+                Ces graphiques présentent l’évolution du nombre de décès liés aux accidents aériens.
+                Le premier met en évidence les fatalités à bord par décennie, tandis que le second
+                montre les décès au sol. Cela permet de mieux comprendre l’impact global des accidents.
+                </p>
                 
                 <div class="mortalities-container">
                     <svg id="decadeChart"></svg>
@@ -149,7 +158,9 @@
         <section id="section4" class="step">
             <div class="content" style="width: 100%; max-width: 1200px; margin: auto;">
                 <h1>Opérateurs : Aviation commerciale vs militaire</h1>
-                <p class="description">Comparaison sur une même échelle temporelle des fatalités totales, du nombre d'accidents (N) et des fatalités moyennes par accident (Avg).</p>
+                <p class="description">Cette section compare les accidents impliquant l’aviation commerciale et militaire.
+                Elle met en relation le nombre total d’accidents (N), les fatalités et la moyenne de décès par accident (Avg),
+                afin d’identifier les différences de risque entre ces deux types d’opérations.</p>
                 
                 <div class="chart-container" style="margin-top: 30px; background: #fff; border-radius: 8px; padding: 20px;">
                     <svg id="operatorChart"></svg>
