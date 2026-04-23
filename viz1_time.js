@@ -2,7 +2,7 @@ function initViz1() {
     const width = 900;
     const height = 450;
     const margin = { top: 40, right: 40, bottom: 50, left: 70 };
-    
+
     // On garde cette variable pour que la fonction updateCharts() dessine tout par défaut
     let selectedRange = [1908, 2023];
 
@@ -37,7 +37,7 @@ function initViz1() {
             .nice()
             .range([height - margin.bottom, margin.top]);
 
-        svg.selectAll("*").remove(); 
+        svg.selectAll("*").remove();
 
         svg.append("g")
             .attr("transform", `translate(0,${height - margin.bottom})`)
@@ -51,8 +51,12 @@ function initViz1() {
         svg.append("text").attr("transform", "rotate(-90)").attr("x", -height / 2).attr("y", 20).attr("text-anchor", "middle").text("Nombre d'accidents");
 
         const historicalPeriods = [
-            { name: "WW1", start: 1914, end: 1919, color: "orange" },
-            { name: "WW2", start: 1939, end: 1946, color: "red" }
+            { name: "WW1", start: 1914, end: 1918, color: "orange" },
+            { name: "WW2", start: 1939, end: 1945, color: "red" },
+            { name: "Jet Age", start: 1955, end: 1972, color: "blue" },
+            { name: "Automation & Avionics", start: 1985, end: 2000, color: "#577590" },
+            { name: "Modern Safety Era", start: 2000, end: 2019, color: "#264653" },
+            { name: "COVID-19", start: 2020, end: 2022, color: "#9b2226" }
         ];
 
         svg.selectAll(".period")
@@ -62,10 +66,15 @@ function initViz1() {
             .attr("fill", d => d.color).attr("opacity", 0.15);
 
         svg.selectAll(".period-label")
-            .data(historicalPeriods).enter().append("text")
-            .attr("x", d => x((d.start + d.end) / 2)).attr("y", margin.top + 15)
-            .attr("text-anchor", "middle").attr("fill", "black").attr("font-size", "12px").text(d => d.name);
-
+            .data(historicalPeriods)
+            .enter()
+            .append("text")
+            .attr("x", d => x((d.start + d.end) / 2))
+            .attr("y", (d, i) => margin.top + 15 + (i % 2) * 15)
+            .attr("text-anchor", "middle")
+            .attr("fill", "black")
+            .attr("font-size", "12px")
+            .text(d => d.name);
         const line = d3.line().x(d => x(d.year)).y(d => y(d.count)).curve(d3.curveMonotoneX);
 
         svg.append("path").datum(accidentsPerYear).attr("fill", "none").attr("stroke", "#0077cc").attr("stroke-width", 2).attr("d", line);
