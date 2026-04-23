@@ -38,7 +38,7 @@
                     <li>Jonathan Kim</li>
                     <li>Francis Trahan</li>
                 </ul>
-                
+
                 <p class="description" style="font-size: 1.2em; text-align: justify; margin-bottom: 15px;">
                     Cette visualisation utilise le jeu de données Airplane Crashes and Fatalities Since 1908 (1908-2023). L'objectif est de comparer les tendances observées selon le temps, la localisation, la gravité et le type d'opérateur.
                 </p>
@@ -46,7 +46,7 @@
                 <p class="description" style="font-size: 1.2em; text-align: justify; margin-bottom: 15px;">
                     Les sections ci-dessous répondent à des questions d'analyse précises basées sur les mesures du jeu de données :
                 </p>
-                
+
                 <ul style="text-align: left; font-size: 1.2em; color: #555; margin: 20px auto; max-width: 700px; line-height: 1.6;">
                     <li><strong>Temps :</strong> évolution annuelle du nombre d'accidents et périodes historiques.</li>
                     <li><strong>Localisation :</strong> distribution géographique des accidents et évolution par continent.</li>
@@ -61,10 +61,10 @@
                 <h1>Temps : Évolution temporelle</h1>
                 <p class="description">
                 Depuis 1908, l'aviation a connu des mutations profondes. Cette première visualisation montre l’évolution du nombre d’accidents aériens par année.
-                On observe des périodes de forte croissance, notamment durant les grandes guerres,
-                ainsi qu’une diminution progressive liée aux avancées technologiques.
+                On observe des périodes de forte croissance, notamment durant les grandes guerres et les périodes de forte croissance du trafic aérien,
+                ainsi qu’une diminution progressive liée aux avancées technologiques et aux améliorations en matière de sécurité.
                 </p>
-                
+
                 <div class="chart-container">
                     <svg id="lineChart"></svg>
                 </div>
@@ -76,11 +76,11 @@
             <div class="content" style="width: 100%; max-width: 1200px; margin: auto;">
                 <h1>Localisation : Géographie des risques</h1>
                 <p class="description">Cette carte représente la distribution géographique des accidents aériens à travers le monde. Chaque point correspond à un accident, dont la taille reflète la fréquence. Le bouton <strong> Lecture </strong> permet d’observer l’évolution par décennie et de voir comment les zones à risque ont changé dans le temps..</p>
-                
+
                 <div class="dashboard-v2" style="display: flex; flex-direction: column; width: 100%; margin-top: 0px;">
-                    
+
                     <div style="position: relative; width: 100%; margin: 0; padding: 0; line-height: 0; font-size: 0;">
-                        
+
                         <div style="position: absolute; top: 140px; left: 15px; z-index: 10; background: rgba(255,255,255,0.85); padding: 10px 15px; border-radius: 5px; border: 1px solid #ddd; line-height: 1.5; font-size: 14px;">
                             <div style="display: flex; gap: 30px;">
                                 <div>
@@ -111,7 +111,7 @@
                     </div>
 
                     <div style="position: relative; width: 100%; margin: 0; padding: 0; line-height: 0; font-size: 0;">
-                        
+
                         <div style="position: absolute; top: 20px; right: -10px; z-index: 10; background: rgba(255,255,255,0.85); padding: 10px 15px; border-radius: 5px; border: 1px solid #ddd; line-height: 1.5; font-size: 13px;">
                             <strong style="font-size: 13px; color: #333;">Continents</strong>
                             <ul style="list-style: none; padding: 0; margin: 5px 0 0 0; display: flex; flex-direction: column; gap: 5px;">
@@ -144,7 +144,7 @@
                 Le premier met en évidence les fatalités à bord par décennie, tandis que le second
                 montre les décès au sol. Cela permet de mieux comprendre l’impact global des accidents.
                 </p>
-                
+
                 <div class="mortalities-container">
                     <svg id="decadeChart"></svg>
                 </div>
@@ -161,7 +161,7 @@
                 <p class="description">Cette section compare les accidents impliquant l’aviation commerciale et militaire.
                 Elle met en relation le nombre total d’accidents (N), les fatalités et la moyenne de décès par accident (Avg),
                 afin d’identifier les différences de risque entre ces deux types d’opérations.</p>
-                
+
                 <div class="chart-container" style="margin-top: 30px; background: #fff; border-radius: 8px; padding: 20px;">
                     <svg id="operatorChart"></svg>
                 </div>
