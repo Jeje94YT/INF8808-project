@@ -5,7 +5,12 @@ function initViz3() {
 
     // TAUX DE MORTALITÉ
     const svgDecade = d3.select("#decadeChart").attr("width", width).attr("height", height);
-    
+    svgDecade.attr("role", "img")
+        .attr("aria-label",
+            "Line chart showing annual aviation mortality rate from 1908 to 2023. " +
+            "The chart includes an interactive a decade highlight feature that displays average fatalities and mortality rate for the hovered year. "
+
+        );
     const tooltipDecade = d3.select("body").append("div").attr("class", "tooltip-decade").style("position", "absolute").style("background", "white").style("border", "1px solid #ccc").style("padding", "6px").style("border-radius", "4px").style("font-size", "12px").style("display", "none");
 
     const yearlyData = d3.rollups(globalData, v => d3.mean(v, d => d.rate), d => d.year).map(d => ({ year: d[0], rate: d[1] })).sort((a, b) => a.year - b.year);
@@ -51,6 +56,12 @@ function initViz3() {
     // DÉCÈS AU SOL
     const svgGround = d3.select("#groundChart").attr("width", width).attr("height", height);
     svgGround.selectAll("*").remove();
+    svgGround.attr("role", "img")
+        .attr("aria-label",
+            "Line chart showing the number of ground fatalities caused by aviation accidents per year from 1908 to 2023. " +
+            "Values fluctuate over time with occasional spikes, particularly in 2001 due to the September 11 attacks." +
+            " The chart includes an interactive feature that displays the exact number of ground fatalities for the hovered year."
+        );
 
     const tooltipGround = d3.select("body").append("div").attr("class", "tooltip-ground").style("position", "absolute").style("background", "white").style("border", "1px solid #ccc").style("padding", "6px").style("border-radius", "4px").style("font-size", "12px").style("display", "none");
 

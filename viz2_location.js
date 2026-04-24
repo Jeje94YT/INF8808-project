@@ -2,13 +2,18 @@ function initViz2() {
     // Carte du monde avec bulles
     const mapWidth = 1200;
     const mapHeight = 380;
-    
+
     const mapSvg = d3.select("#mapChart").attr("viewBox", `0 0 ${mapWidth} ${mapHeight}`);
-    
+    mapSvg.attr("role", "img")
+        .attr("aria-label",
+            "World map showing aviation accidents by country. " +
+            "Circle size represents the number of accidents, and colors distinguish civil (blue) and war-related (red) incidents. " +
+            "Higher concentrations appear in regions such as North America and Europe."
+        );
     const mapProjection = d3.geoNaturalEarth1()
         .scale(160)
         .translate([mapWidth / 2.1, mapHeight / 1.69]);
-        
+
     const mapPath = d3.geoPath().projection(mapProjection);
 
     const tooltip = d3.select("body").append("div").style("position", "absolute").style("background", "white").style("border", "1px solid #ccc").style("padding", "6px").style("border-radius", "4px").style("font-size", "12px").style("display", "none").style("z-index", "1000");
@@ -40,7 +45,7 @@ function initViz2() {
 
     function getCountryCoordinates(countryName) {
         if (!worldGeoJSON || countryName === "Unknown") return null;
-        
+
         const manualCentroids = {
             "canada": [-96.0, 60.0],
             "united states": [-98.5795, 39.8283],
@@ -49,17 +54,17 @@ function initViz2() {
             "united kingdom": [-3.4360, 53.0],
             "norway": [8.4689, 60.4720],
         };
-        
+
         const cLower = countryName.toLowerCase();
         if (manualCentroids[cLower]) return manualCentroids[cLower];
 
         const normalize = name => name.toLowerCase().replace("usa", "united states of america").replace("united states", "united states of america").replace("england", "united kingdom");
-        
-        const feature = worldGeoJSON.features.find(f => 
-            normalize(f.properties.name).includes(normalize(countryName)) || 
+
+        const feature = worldGeoJSON.features.find(f =>
+            normalize(f.properties.name).includes(normalize(countryName)) ||
             normalize(countryName).includes(normalize(f.properties.name))
         );
-        
+
         if (!feature) return null;
 
         const largestPolyCoords = getLargestPolygon(feature);
@@ -67,7 +72,7 @@ function initViz2() {
             const mainLandFeature = { type: "Feature", geometry: { type: "Polygon", coordinates: largestPolyCoords } };
             return d3.geoCentroid(mainLandFeature);
         }
-        
+
         return d3.geoCentroid(feature);
     }
 
@@ -79,7 +84,7 @@ function initViz2() {
 
         let mapCounts = d3.rollups(mapFiltered, v => v.length, d => d.country, d => d.war);
         let bubbleData = [];
-        
+
         mapCounts.forEach(countryGroup => {
             const coords = getCountryCoordinates(countryGroup[0]);
             if (coords) {
@@ -92,19 +97,19 @@ function initViz2() {
         bubbleData.sort((a, b) => b.count - a.count);
 
         const rScale = d3.scaleSqrt().domain([0, d3.max(bubbleData, d => d.count) || 1]).range([2, 16]);
-        
+
         const circles = mapSvg.selectAll("circle.accident-bubble").data(bubbleData, d => d.country + "-" + d.war);
 
         circles.exit().transition().duration(500).attr("r", 0).remove();
 
         const circlesEnter = circles.enter().append("circle").attr("class", "accident-bubble")
-            .attr("cx", d => mapProjection([d.lon, d.lat])[0] + (d.war ? -5 : 5)) 
+            .attr("cx", d => mapProjection([d.lon, d.lat])[0] + (d.war ? -5 : 5))
             .attr("cy", d => mapProjection([d.lon, d.lat])[1])
             .attr("fill", d => d.war ? "red" : "blue")
             .attr("opacity", 0.65)
             .attr("stroke", "#ffffff")
             .attr("stroke-width", 0.8)
-            .attr("r", 0) 
+            .attr("r", 0)
             .on("mouseover", (event, d) => {
                 tooltip.style("display", "block").html(`<strong>Pays:</strong> ${d.country}<br><strong>Accidents:</strong> ${d.count}<br><strong>Type:</strong> ${d.war ? "Guerre" : "Civil"}`);
                 d3.select(event.currentTarget).attr("opacity", 1).attr("stroke", "#333").attr("stroke-width", 1.5);
@@ -129,10 +134,14 @@ function initViz2() {
     // Timeline des accidents par continent
     const timelineWidth = 1030;
     const timelineHeight = 240;
-    const marginTimeline = { top: 20, right: 150, bottom: 40, left: 60 }; 
-    
+    const marginTimeline = { top: 20, right: 150, bottom: 40, left: 60 };
+
     const svgTimeline = d3.select("#timelineChart").attr("viewBox", `0 0 ${timelineWidth} ${timelineHeight}`);
-    
+    svgTimeline.attr("role", "img")
+        .attr("aria-label",
+            "Line chart showing aviation accidents per year from 1908 to 2023 by continent. " +
+            "Each colored line represents a continent, with Europe and North America generally showing higher counts over time."
+        );
     const tooltipTimeline = d3.select("body").append("div").attr("class", "tooltip-timeline").style("position", "absolute").style("background", "white").style("border", "1px solid #ccc").style("padding", "10px").style("border-radius", "4px").style("font-size", "12px").style("display", "none").style("pointer-events", "none").style("z-index", "1000");
 
     function drawTimeline() {
@@ -148,12 +157,12 @@ function initViz2() {
         const yTime = d3.scaleLinear().domain([0, d3.max(lineData, c => d3.max(c.values, d => d.count))]).nice().range([timelineHeight - marginTimeline.bottom, marginTimeline.top]);
         const color = d3.scaleOrdinal().domain(continents).range(d3.schemeTableau10);
 
-        svgTimeline.selectAll("*").remove(); 
-        
+        svgTimeline.selectAll("*").remove();
+
         svgTimeline.append("g")
             .attr("transform", `translate(0,${timelineHeight - marginTimeline.bottom})`)
             .call(d3.axisBottom(xTime).tickFormat(d3.format("d")));
-            
+
         svgTimeline.append("g")
             .attr("transform", `translate(${marginTimeline.left},0)`)
             .call(d3.axisLeft(yTime));
@@ -170,7 +179,7 @@ function initViz2() {
         svgTimeline.append("text")
             .attr("transform", "rotate(-90)")
             .attr("x", -timelineHeight / 2)
-            .attr("y", 20) 
+            .attr("y", 20)
             .attr("text-anchor", "middle")
             .style("font-size", "14px")
             .style("font-weight", "bold")
@@ -194,7 +203,7 @@ function initViz2() {
             .on("mousemove", function(event) {
                 const [mouseX] = d3.pointer(event, this);
                 const hoveredYear = Math.round(xTime.invert(mouseX));
-                
+
                 hoverLine.attr("x1", xTime(hoveredYear)).attr("x2", xTime(hoveredYear)).style("opacity", 1);
                 hoverCircles.attr("cx", xTime(hoveredYear)).attr("cy", d => {
                     const cData = lineData.find(c => c.id === d);
@@ -204,7 +213,7 @@ function initViz2() {
 
                 let tooltipHtml = `<div style="border-bottom:1px solid #ccc; margin-bottom:5px; padding-bottom:3px;"><strong>Année: ${hoveredYear}</strong></div>`;
                 let hasAccidents = false;
-                
+
                 const stats = lineData.map(c => {
                     const yearInfo = c.values.find(v => v.year === hoveredYear);
                     return { continent: c.id, count: yearInfo ? yearInfo.count : 0 };

@@ -729,7 +729,10 @@ function initViz4() {
     comparePanel.style("display", "block");
     compareTitle.text(`Comparaison ${compareYearA} vs ${compareYearB}`);
     compareSvg.selectAll("*").remove();
-
+    compareSvg.attr("role", "img")
+        .attr("aria-label",
+            "Grouped bar chart comparing aviation fatalities between selected years, split into commercial and military categories."
+        );
     const yearAData =
       yearlyData.find((d) => d.year === compareYearA) ||
       createViz4YearRecord(compareYearA);
