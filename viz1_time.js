@@ -38,7 +38,14 @@ function initViz1() {
             .range([height - margin.bottom, margin.top]);
 
         svg.selectAll("*").remove();
-
+        svg.attr("role", "img")
+            .attr("aria-label", "Line chart of aviation accidents per year from 1908 to 2023. The chart shows fluctuations over time, with a peak around 1946 and a general decrease in recent decades. Key historical periods such as World War I, World War II, the Jet Age, and COVID-19 are highlighted.");
+        svg.append("desc").text(
+            "This line chart shows the number of aviation accidents per year from 1908 to 2023. " +
+            "The x-axis represents years and the y-axis represents the number of accidents. " +
+            "The highest number of accidents occurs around 1946 with 88 accidents. " +
+            "Historical periods such as World War I, World War II, the Jet Age, Automation and Avionics, the Modern Safety Era, and COVID-19 are highlighted."
+        );
         svg.append("g")
             .attr("transform", `translate(0,${height - margin.bottom})`)
             .call(d3.axisBottom(x).tickFormat(d3.format("d")));
@@ -86,6 +93,8 @@ function initViz1() {
             })
             .on("mousemove", event => tooltip.style("left", (event.pageX + 10) + "px").style("top", (event.pageY - 20) + "px"))
             .on("mouseout", () => tooltip.style("display", "none"));
+
+
     }
 
     updateCharts();
