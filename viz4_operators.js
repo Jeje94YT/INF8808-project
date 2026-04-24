@@ -827,7 +827,7 @@ function initViz4() {
       .style("font-size", "12px")
       .text("Fatalités totales");
 
-    compareSvg
+    const compareBars = compareSvg
       .append("g")
       .selectAll("rect")
       .data(rows)
@@ -881,7 +881,7 @@ function initViz4() {
       .attr("opacity", 0.9)
       .style("pointer-events", "none");
 
-    compareSvg
+    const compareAnnotations = compareSvg
       .append("g")
       .selectAll("text")
       .data(rows)
@@ -893,6 +893,109 @@ function initViz4() {
       .style("font-size", "11px")
       .style("fill", "#374151")
       .text((d) => `N=${d.accidentCount} | Avg=${d.avgFatalities.toFixed(1)}`);
+
+    const compareHoverLayer = compareSvg
+      .append("g")
+      .attr("class", "viz4-compare-hover-layer");
+    const compareHighlightGroup = compareHoverLayer
+      .append("g")
+      .style("display", "none");
+    const compareSegmentGroup = compareHoverLayer
+      .append("g")
+      .attr("class", "viz4-compare-hover-segments");
+
+    compareHighlightGroup
+      .append("rect")
+      .attr("class", "viz4-compare-year-highlight")
+      .attr("y", cMargin.top)
+      .attr("height", cHeight - cMargin.top - cMargin.bottom)
+      .attr("fill", "#9ca3af")
+      .attr("fill-opacity", 0.08)
+      .attr("stroke", "#6b7280")
+      .attr("stroke-dasharray", "4,4");
+
+    function renderCompareYearDetail(year, event) {
+      const rowsForYear = rows.filter((row) => row.year === year);
+      if (rowsForYear.length === 0) return;
+
+      compareHighlightGroup
+        .style("display", null)
+        .select("rect")
+        .attr("x", xYear(year))
+        .attr("width", xYear.bandwidth());
+
+      compareBars.attr("opacity", (d) => (d.year === year ? 1 : 0.24));
+      compareAnnotations.style("opacity", (d) => (d.year === year ? 1 : 0.12));
+
+      const segmentRows = rowsForYear.flatMap(buildRealAccidentSegments);
+      const lines = compareSegmentGroup
+        .selectAll("line")
+        .data(segmentRows, (d) => `${d.year}-${d.type}-${d.idx}`);
+
+      lines.exit().remove();
+
+      lines
+        .enter()
+        .append("line")
+        .merge(lines)
+        .attr("x1", (d) => xYear(d.year) + xType(d.type))
+        .attr("x2", (d) => xYear(d.year) + xType(d.type) + xType.bandwidth())
+        .attr("y1", (d) => y(d.yValue))
+        .attr("y2", (d) => y(d.yValue))
+        .attr("stroke", "#111827")
+        .attr("stroke-width", 0.8)
+        .attr("stroke-dasharray", "3,2")
+        .attr("opacity", 0.9)
+        .style("pointer-events", "none");
+
+      const commercialRow =
+        rowsForYear.find((row) => row.type === "commercial") ||
+        createViz4CategoryStats();
+      const militaryRow =
+        rowsForYear.find((row) => row.type === "military") ||
+        createViz4CategoryStats();
+
+      tooltip
+        .style("display", "block")
+        .html(
+          `<strong>Année ${year}</strong><br>` +
+            `<span style="color:${operatorColors.commercial}">●</span> Commercial: Total=${commercialRow.totalFatalities.toFixed(0)}, N=${commercialRow.accidentCount}, Avg=${commercialRow.avgFatalities.toFixed(1)}<br>` +
+            `<span style="color:${operatorColors.military}">●</span> Militaire: Total=${militaryRow.totalFatalities.toFixed(0)}, N=${militaryRow.accidentCount}, Avg=${militaryRow.avgFatalities.toFixed(1)}`,
+        )
+        .style("left", `${event.pageX + 12}px`)
+        .style("top", `${event.pageY - 24}px`);
+    }
+
+    function clearCompareYearDetail() {
+      compareHighlightGroup.style("display", "none");
+      compareSegmentGroup.selectAll("line").remove();
+      compareBars.attr("opacity", 0.92);
+      compareAnnotations.style("opacity", 1);
+      tooltip.style("display", "none");
+    }
+
+    compareSvg
+      .append("g")
+      .attr("class", "viz4-compare-year-overlays")
+      .selectAll("rect")
+      .data(compareYears)
+      .enter()
+      .append("rect")
+      .attr("x", (year) => xYear(year))
+      .attr("y", cMargin.top)
+      .attr("width", xYear.bandwidth())
+      .attr("height", cHeight - cMargin.top - cMargin.bottom)
+      .attr("fill", "transparent")
+      .on("mouseenter", function (event, year) {
+        renderCompareYearDetail(year, event);
+      })
+      .on("mousemove", function (event, year) {
+        renderCompareYearDetail(year, event);
+      })
+      .on("mouseleave", clearCompareYearDetail);
+
+    renderCompareYearDetail(compareYearB, { pageX: 0, pageY: 0 });
+    tooltip.style("display", "none");
 
     const compareLegend = compareSvg
       .append("g")
